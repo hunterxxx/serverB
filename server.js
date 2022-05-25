@@ -23,12 +23,14 @@ const corsOptions = {
     credentials: true,
 }
 
-let tasks = [
-    { id: '0', name: 'Eat', timestamp: moment().subtract(6, 'days') },
-    { id: '1', name: 'Sleep', timestamp: moment() },
-    { id: '2', name: 'Pawn', timestamp: moment().subtract(28, 'days') },
-    { id: '3', name: 'Repeat', timestamp: moment().add(1, 'days') } //testing purpose + 1 day
-]
+const today = moment()
+
+const tasks = [
+    { id: "0", name: "Eat", timestamp: moment().subtract(6, 'days') },
+    { id: "1", name: "Sleep", timestamp: moment() },
+    { id: "2", name: "Pawn", timestamp: moment().subtract(28, 'days') },
+    { id: "3", name: "Repeat", timestamp: moment().add(1, 'days') } //testing purpose + 1 day
+];
 
 localStorage.setItem('tasks', JSON.stringify(tasks))
 
@@ -41,22 +43,22 @@ app.get('/all', (req, res) => {
     res.status(200)
 });
 
-
 app.post('/add', (req, res) => {
-    console.log(req.body)
     let newTask = req.body;
     let oldTasks = JSON.parse(localStorage.getItem('tasks') || "[]");
     oldTasks.push(newTask)
     localStorage.setItem('tasks', JSON.stringify(oldTasks))
-    res.status(201).json();
+    res.status(201);
 });
 
 app.delete('/delete/:id', (req, res) => {
-    let id = parseInt(req.params.id);
-    if (tasks.filter(tasks => tasks.id == id).length !== 0) {
-        tasks = tasks.filter(task => task.id !== id);
-        localStorage.setItem('tasks', tasks)
-        res.status(200).send();
+    let id = req.params.id;
+    console.log(id)
+    let oldTasks = JSON.parse(localStorage.getItem('tasks') || "[]");
+    if (oldTasks.filter(oldTasks => oldTasks.id === id).length !== 0) {
+        oldTasks = oldTasks.filter(task => id !== task.id);
+        localStorage.setItem('tasks', JSON.stringify(oldTasks))
+        res.status(200).send("task is deleted");
     } else {
         res.status(404).send();
     }
