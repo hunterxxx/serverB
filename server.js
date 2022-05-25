@@ -20,10 +20,7 @@ const corsOptions = {
             callback(new Error("Not allowed by CORS"))
         }
     },
-    credentials: true,
 }
-
-const today = moment()
 
 const tasks = [
     { id: "0", name: "Eat", timestamp: moment().subtract(6, 'days') },
@@ -53,7 +50,6 @@ app.post('/add', (req, res) => {
 
 app.delete('/delete/:id', (req, res) => {
     let id = req.params.id;
-    console.log(id)
     let oldTasks = JSON.parse(localStorage.getItem('tasks') || "[]");
     if (oldTasks.filter(oldTasks => oldTasks.id === id).length !== 0) {
         oldTasks = oldTasks.filter(task => id !== task.id);
